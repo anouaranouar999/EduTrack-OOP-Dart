@@ -4,7 +4,7 @@ import 'Lib/models/student.dart';
 import 'Lib/models/teacher.dart';
 import 'Lib/models/course.dart';
 import 'Lib/services/user_service.dart';
-//import 'Lib/services/course_service.dart';
+import 'Lib/services/course_service.dart';
 import 'Lib/services/user_stream.dart';
 import 'storage.dart';
 
@@ -17,7 +17,7 @@ void main() async {
 
   // Services
   UserService userService = UserService(userStream);
-//CourseService courseService = CourseService();
+  CourseService courseService = CourseService();
 
   // Load users from storage
   List<User> loadedUsers = await storage.loadUsers();
@@ -96,8 +96,9 @@ void main() async {
       case "4":
         stdout.write("Course name: ");
         String name = stdin.readLineSync()!;
-        // TODO: Uncomment after Adam finishes CourseService methods
-        // await courseService.addCourse(name);
+        stdout.write("Teacher's Id: ");
+        int teacherId = int.parse(stdin.readLineSync()!);
+        await courseService.addCourse(name, teacherId);
         print("Course added successfully (placeholder)");
         break;
 
@@ -115,12 +116,12 @@ void main() async {
         }
 
         // TODO: Uncomment after Adam finishes CourseService methods
-        // try {
-        //   await courseService.enrollStudent(student as Student, courseId);
-        //   print("${student.name} enrolled in course $courseId");
-        // } catch (e) {
-        //   print("Error: $e");
-        // }
+        try {
+          await courseService.enrollStudent(student as Student, courseId);
+          print("${student.name} enrolled in course $courseId");
+        } catch (e) {
+          print("Error: $e");
+        }
         print("${student.name} enrolled in course $courseId (placeholder)");
         break;
 
@@ -150,14 +151,16 @@ void main() async {
         }
 
         // TODO: Uncomment after Adam finishes Teacher.assignGrade
-        // (teacher as Teacher).assignGrade(student as Student, courseId, grade);
+        (teacher as Teacher).assignGrade(student as Student, courseId, grade);
         print("Grade assigned successfully (placeholder)");
         break;
 
       case "7":
         var students = userService.getUsers().where((u) => u.role == "Student");
         for (var student in students) {
-          print("${student.name} average: ${(student as Student).calculateScore()}");
+          print(
+            "${student.name} average: ${(student as Student).calculateScore()}",
+          );
         }
         break;
 

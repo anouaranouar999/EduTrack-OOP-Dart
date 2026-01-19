@@ -1,13 +1,13 @@
 class Course {
-  static int courseId = 0;
+  int? courseId;
   String? title;
   int? teacherId;
   List<String> studentsList = [];
 
-  Course(String title, int teacherId) {
+  Course(String title, int teacherId, int courseId) {
     this.title = title;
     this.teacherId = teacherId;
-    courseId++;
+    this.courseId = courseId;
   }
 
   @override
